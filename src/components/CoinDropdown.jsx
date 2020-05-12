@@ -1,34 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
-const CoinDropdown = () => {
-  const [topTen, setTopTen] = useState([]);
+const CoinDropdown = (props) => {
+  const [topTen, setTopTen] = useLocalStorage("top-ten", []);
   useEffect(() => {
-    axios
-      .get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=10")
-      .then((res) => {
-        console.log(res.data);
-        setTopTen([...res.data]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    setTopTen([...props.coinData]);
+    //eslint-disable-next-line
+  }, [props.coinData]);
 
   const handleChange = (e) => {
     if (e.target.value) {
+      const findCoin = topTen.find((item) => item.id === e.target.value);
+      props.setCoinData([findCoin]);
+    } else {
       axios
         .get(
-          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=1&ids=${e.target.value}`
+          "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=true"
         )
-        .then((res) => {
-          console.log(res.data[0]);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      optionList();
+        .then((res) => props.setCoinData(res.data))
+        .catch((err) => console.log(err));
     }
   };
   const optionList = () => {
@@ -44,7 +35,7 @@ const CoinDropdown = () => {
   return (
     <select onChange={handleChange}>
       <option key="default" value="">
-        --Choose--
+        Top Ten
       </option>
       {optionList()}
     </select>

@@ -2,7 +2,7 @@ import React from "react";
 import { useDarkMode } from "../hooks/useDarkMode";
 import CoinDropdown from "./CoinDropdown";
 
-const Navbar = () => {
+const Navbar = (props) => {
   const [darkMode, setDarkMode] = useDarkMode(false);
   const toggleMode = (e) => {
     e.preventDefault();
@@ -11,7 +11,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <h1>Crypto Tracker</h1>
-      <CoinDropdown />
+      <CoinDropdown setCoinData={props.setCoinData} coinData={props.coinData} />
       <div className="dark-mode__toggle" onClick={toggleMode}>
         <div className={darkMode ? "toggle toggled" : "toggle"} />
       </div>
