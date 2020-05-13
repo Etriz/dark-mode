@@ -11,7 +11,11 @@ const Navbar = (props) => {
   return (
     <nav className="navbar">
       <h1>Crypto Tracker</h1>
-      <CoinDropdown setCoinData={props.setCoinData} coinData={props.coinData} />
+      <CoinDropdown
+        setCoinData={props.setCoinData}
+        coinData={props.coinData}
+        defaultTen={props.defaultTen}
+      />
       <div className="dark-mode__toggle" onClick={toggleMode}>
         <div className={darkMode ? "toggle toggled" : "toggle"} />
       </div>
